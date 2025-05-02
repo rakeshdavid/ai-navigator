@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Develop ROI calculation methodology"
-                    ],
-                    "status": "planned"
-                  },
                   {
                     "name": "Value Optimization",
                     "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
