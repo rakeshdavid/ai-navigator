@@ -1022,7 +1022,7 @@ const Home = () => {
                     <select
                       className="w-full p-2 border rounded"
                       value={currentMaturity[pillar] || ''}
-                      onChange={(e) => handleMaturityChange(pillar, parseInt(e.target.value), 'current')}
+                      onChange={(e) => handleMaturityChange(pillar, e.target.value, 'current')}
                     >
                       <option value="">Select level</option>
                       {MATURITY_LEVELS.map(level => (
