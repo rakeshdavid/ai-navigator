@@ -45,6 +45,13 @@ const Home = () => {
   const [apiKey, setApiKey] = useState('');
   const [apiKeyProvider, setApiKeyProvider] = useState('gemini');
   const [showBYOKModal, setShowBYOKModal] = useState(false);
+  
+  // Debug state for development
+  useEffect(() => {
+    console.log("Current Maturity:", currentMaturity);
+    console.log("Target Maturity:", targetMaturity);
+    console.log("Can Generate:", canGenerateRoadmap());
+  }, [currentMaturity, targetMaturity, businessGoals]);
 
   // Handle maturity level changes
   const handleMaturityChange = (pillar, value, type) => {
