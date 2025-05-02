@@ -143,51 +143,405 @@ const Home = () => {
       
       // If using the dummy key, return a mock response for development/testing
       if (key === "DUMMY_KEY_FOR_TESTING") {
-        // Create a realistic mock response based on the input
-        text = JSON.stringify({
+        // Get the current date for timeline calculations
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentQuarter = Math.floor(today.getMonth() / 3) + 1;
+        
+        // Create a realistic mock response based on the input with Gartner-style timeline format
+        const timelineData = {
           "pillars": [
             {
               "name": "AI Strategy",
               "currentLevel": currentMaturity["AI Strategy"] || 1,
               "targetLevel": targetMaturity["AI Strategy"] || 3,
-              "milestones": [
-                {
-                  "title": "Strategy Foundation",
-                  "description": "Establish core AI strategy aligned with business goals",
-                  "timeline": "Q2 2025",
-                  "actions": ["Define AI vision and mission", "Identify key business problems for AI"]
-                },
-                {
-                  "title": "Strategy Implementation",
-                  "description": "Begin executing AI strategy across selected business units",
-                  "timeline": "Q3 2025",
-                  "actions": ["Launch pilot projects", "Measure initial results and adjust strategy"]
-                }
-              ],
-              "kpis": ["% of business units with AI projects", "ROI of AI initiatives"]
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Current State Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "description": "Assess existing AI capabilities and alignment with business strategy",
+                    "milestones": [
+                      "Create AI strategy steering committee",
+                      "Complete AI capabilities assessment",
+                      "Document current AI initiatives"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "AI Strategy Development",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Develop comprehensive AI strategy aligned with business objectives",
+                    "milestones": [
+                      "Define AI vision and principles",
+                      "Create AI investment roadmap",
+                      "Identify strategic AI use cases"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Implementation Planning",
+                    "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Develop implementation plans for AI initiatives",
+                    "milestones": [
+                      "Prioritize AI use cases",
+                      "Assign ownership and resources",
+                      "Establish success metrics"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Strategy Execution",
+                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Execute AI strategy across business units",
+                    "milestones": [
+                      "Launch pilot projects",
+                      "Scale successful initiatives",
+                      "Review and adjust strategy"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "% of business objectives supported by AI initiatives",
+                  "AI investment ROI",
+                  "Number of AI-enabled business processes"
+                ]
+              }
+            },
+            {
+              "name": "AI Value",
+              "currentLevel": currentMaturity["AI Value"] || 1,
+              "targetLevel": targetMaturity["AI Value"] || 4,
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Value Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Assess current AI value measurement capabilities",
+                    "milestones": [
+                      "Document existing value measurement practices",
+                      "Identify gaps in value tracking",
+                      "Benchmark against industry standards"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "Value Framework Development",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Develop framework for measuring AI value",
+                    "milestones": [
+                      "Define value metrics and KPIs",
+                      "Create value tracking processes",
+                      "Develop ROI calculation methodology"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Value Optimization",
+                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Continuously optimize AI value realization",
+                    "milestones": [
+                      "Implement value tracking dashboards",
+                      "Regular value review meetings",
+                      "Adjust initiatives based on value delivery"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "Cost reduction attributed to AI",
+                  "Revenue increase from AI initiatives",
+                  "Customer satisfaction improvements"
+                ]
+              }
+            },
+            {
+              "name": "AI Organization",
+              "currentLevel": currentMaturity["AI Organization"] || 1,
+              "targetLevel": targetMaturity["AI Organization"] || 3,
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Organizational Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "description": "Assess current organizational structure and AI capabilities",
+                    "milestones": [
+                      "Map existing AI roles and teams",
+                      "Identify organizational gaps",
+                      "Review governance structure"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "Organizational Design",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Design optimal AI organizational structure",
+                    "milestones": [
+                      "Define AI roles and responsibilities",
+                      "Develop AI center of excellence model",
+                      "Create AI governance framework"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Implementation",
+                    "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 4 > 4 ? currentQuarter + 4 - 4 : currentQuarter + 4} ${currentQuarter + 4 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Implement new AI organizational structure",
+                    "milestones": [
+                      "Staff key AI roles",
+                      "Establish AI center of excellence",
+                      "Implement governance processes"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "% of departments with AI expertise",
+                  "AI project delivery efficiency",
+                  "Cross-functional collaboration metrics"
+                ]
+              }
+            },
+            {
+              "name": "People & Culture",
+              "currentLevel": currentMaturity["People & Culture"] || 1,
+              "targetLevel": targetMaturity["People & Culture"] || 3,
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Skills Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Assess current AI skills and cultural readiness",
+                    "milestones": [
+                      "Complete AI skills inventory",
+                      "Assess AI cultural readiness",
+                      "Identify skill gaps"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "Learning & Development",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Develop AI training and upskilling programs",
+                    "milestones": [
+                      "Create AI learning paths",
+                      "Implement training platforms",
+                      "Launch awareness campaigns"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Culture Transformation",
+                    "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Foster AI-positive culture across organization",
+                    "milestones": [
+                      "Implement change management",
+                      "Create AI champions network",
+                      "Recognize AI achievements"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "% of employees with AI literacy",
+                  "AI training completion rates",
+                  "Employee AI adoption metrics"
+                ]
+              }
+            },
+            {
+              "name": "Governance",
+              "currentLevel": currentMaturity["Governance"] || 1,
+              "targetLevel": targetMaturity["Governance"] || 3,
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Governance Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "description": "Assess current AI governance practices",
+                    "milestones": [
+                      "Review existing governance policies",
+                      "Identify governance gaps",
+                      "Benchmark against industry standards"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "Framework Development",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Develop AI governance framework",
+                    "milestones": [
+                      "Create AI ethics guidelines",
+                      "Develop responsible AI principles",
+                      "Design risk management approach"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Implementation",
+                    "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Implement governance framework across organization",
+                    "milestones": [
+                      "Establish governance committee",
+                      "Roll out governance processes",
+                      "Train staff on compliance"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Continuous Improvement",
+                    "startQuarter": `Q${currentQuarter + 4 > 4 ? currentQuarter + 4 - 4 : currentQuarter + 4} ${currentQuarter + 4 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 6 > 4 ? currentQuarter + 6 - 4 : currentQuarter + 6} ${currentQuarter + 6 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Continuously improve governance practices",
+                    "milestones": [
+                      "Regular governance reviews",
+                      "Update policies as needed",
+                      "Respond to regulatory changes"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "AI risk assessment coverage",
+                  "Compliance with AI regulations",
+                  "Ethics violation incidents"
+                ]
+              }
+            },
+            {
+              "name": "Engineering",
+              "currentLevel": currentMaturity["Engineering"] || 1,
+              "targetLevel": targetMaturity["Engineering"] || 4,
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Engineering Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "description": "Assess current AI engineering capabilities",
+                    "milestones": [
+                      "Audit AI development practices",
+                      "Review technical infrastructure",
+                      "Identify engineering gaps"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "Foundation Building",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Build foundational AI engineering capabilities",
+                    "milestones": [
+                      "Implement MLOps practices",
+                      "Establish development standards",
+                      "Build technical infrastructure"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Scaling Capabilities",
+                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Scale AI engineering across organization",
+                    "milestones": [
+                      "Implement AI platforms",
+                      "Automate ML pipelines",
+                      "Enable self-service capabilities"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "Model deployment cycle time",
+                  "AI system reliability metrics",
+                  "Engineering productivity metrics"
+                ]
+              }
             },
             {
               "name": "Data",
               "currentLevel": currentMaturity["Data"] || 1,
-              "targetLevel": targetMaturity["Data"] || 3,
-              "milestones": [
-                {
-                  "title": "Data Assessment",
-                  "description": "Evaluate current data quality, governance, and infrastructure",
-                  "timeline": "Q2 2025",
-                  "actions": ["Conduct data quality audit", "Identify data gaps and opportunities"]
-                },
-                {
-                  "title": "Data Transformation",
-                  "description": "Implement data governance and improve data quality",
-                  "timeline": "Q4 2025",
-                  "actions": ["Establish data governance framework", "Develop data quality metrics"]
-                }
-              ],
-              "kpis": ["Data quality score", "% of data accessible for AI models"]
+              "targetLevel": targetMaturity["Data"] || 4,
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Data Assessment",
+                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
+                    "description": "Assess current data quality, governance, and infrastructure",
+                    "milestones": [
+                      "Conduct data quality audit",
+                      "Map data sources and flows",
+                      "Identify data gaps"
+                    ],
+                    "status": "in-progress"
+                  },
+                  {
+                    "name": "Data Foundation",
+                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Build foundational data capabilities",
+                    "milestones": [
+                      "Implement data governance",
+                      "Enhance data quality",
+                      "Develop data architecture"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Advanced Data Capabilities",
+                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 4 > 4 ? currentQuarter + 4 - 4 : currentQuarter + 4} ${currentQuarter + 4 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Develop advanced data capabilities for AI",
+                    "milestones": [
+                      "Implement data catalogs",
+                      "Enable self-service analytics",
+                      "Develop data sharing capabilities"
+                    ],
+                    "status": "planned"
+                  },
+                  {
+                    "name": "Data Excellence",
+                    "startQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
+                    "endQuarter": `Q${currentQuarter + 7 > 4 ? currentQuarter + 7 - 4 : currentQuarter + 7} ${currentQuarter + 7 > 4 ? currentYear + 1 : currentYear}`,
+                    "description": "Achieve data excellence across organization",
+                    "milestones": [
+                      "Implement advanced data lifecycle management",
+                      "Achieve high data literacy",
+                      "Enable data-driven decision making"
+                    ],
+                    "status": "planned"
+                  }
+                ],
+                "kpis": [
+                  "Data quality score",
+                  "% of data accessible for AI models",
+                  "Data governance maturity"
+                ]
+              }
             }
           ]
-        });
+        };
+        
+        // Return the timeline data as a JSON string
+        text = JSON.stringify(timelineData);
       } else {
         // Use the actual API
         const result = await model.generateContent(prompt);
