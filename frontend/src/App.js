@@ -57,6 +57,40 @@ const Home = () => {
     const freeQueryUsed = hasUsedFreeQuery();
     console.log("Free query used:", freeQueryUsed);
   }, []);
+
+  // Check if there's enough data to generate a roadmap
+  const canGenerateRoadmap = () => {
+    // Debug the inputs
+    console.log("Checking if can generate roadmap:");
+    console.log("Business goals:", businessGoals.trim().length > 0);
+    console.log("API key provided:", apiKey.trim().length > 0);
+    
+    // If user has already provided their own API key and business goals, enable the button
+    if (apiKey.trim().length > 0 && businessGoals.trim().length > 0) {
+      console.log("User provided API key and business goals - enabling generation");
+      return true;
+    }
+    
+    if (Object.keys(currentMaturity).length === 0) {
+      console.log("No current maturity levels set");
+      return false;
+    }
+    
+    // Check each pillar to find at least one valid pair
+    const validPillars = Object.keys(currentMaturity).filter(pillar => {
+      const current = currentMaturity[pillar];
+      const target = targetMaturity[pillar];
+      const isValid = current !== undefined && target !== undefined && target > current;
+      console.log(`Pillar ${pillar}: current=${current}, target=${target}, valid=${isValid}`);
+      return isValid;
+    });
+    
+    const hasValidMaturityPairs = validPillars.length > 0;
+    console.log("Valid pillars:", validPillars);
+    console.log("Has valid maturity pairs:", hasValidMaturityPairs);
+    
+    return businessGoals.trim().length > 0 && hasValidMaturityPairs;
+  };
   
   // Debug state for development
   useEffect(() => {
@@ -65,7 +99,7 @@ const Home = () => {
     const canGenerate = canGenerateRoadmap();
     console.log("Can Generate:", canGenerate);
   }, [currentMaturity, targetMaturity, businessGoals]);
-
+  
   // Handle maturity level changes
   const handleMaturityChange = (pillar, value, type) => {
     const numValue = parseInt(value);
@@ -131,69 +165,13 @@ const Home = () => {
         return;
       }
 
-      // Create the prompt for the AI
       // Get the current date for timeline calculations
       const today = new Date();
       const currentYear = today.getFullYear();
       const currentQuarter = Math.floor(today.getMonth() / 3) + 1;
 
-      const prompt = `
-        As an AI maturity consultant, create a detailed roadmap based on the following information:
-        
-        Business Goals: ${businessGoals}
-        
-        Current Maturity Levels:
-        ${Object.entries(currentMaturity).map(([pillar, level]) => `${pillar}: ${level} - ${MATURITY_LEVELS.find(l => l.value === level)?.label}`).join('\n')}
-        
-        Target Maturity Levels:
-        ${Object.entries(targetMaturity).map(([pillar, level]) => `${pillar}: ${level} - ${MATURITY_LEVELS.find(l => l.value === level)?.label}`).join('\n')}
-        
-        For each pillar that has both current and target maturity levels defined, please create a detailed roadmap with stages, timelines, milestones, and KPIs.
-        
-        Format your response as JSON with the following structure:
-        {
-          "pillars": [
-            {
-              "name": "Pillar Name",
-              "currentLevel": number,
-              "targetLevel": number,
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Stage Name",
-                    "startQuarter": "Q1 2025",
-                    "endQuarter": "Q2 2025",
-                    "description": "Detailed description of this stage",
-                    "milestones": ["Milestone 1", "Milestone 2"],
-                    "status": "in-progress"
-                  }
-                ],
-                "kpis": ["KPI 1", "KPI 2"]
-              }
-            }
-          ]
-        }
-        
-        The roadmap should follow the Gartner AI Maturity Model framework. Start from the current quarter (Q${currentQuarter} ${currentYear}) and map out a realistic timeline to reach the target maturity level for each pillar.
-        
-        For the status of each stage, use "in-progress" for the first stage, and "planned" for all subsequent stages.
-        
-        Focus on practical, actionable advice specific to each pillar's maturity journey. The roadmap should enable the organization to systematically progress from their current maturity level to their target level over a realistic timeframe.
-      `;
-
-      // Initialize the Generative AI
-      const genAI = new GoogleGenerativeAI(key);
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      
-      // Generate content
-      let text;
-      let roadmapData;
-      
-      // We'll use mock data for all cases to avoid API errors
-      console.log("Using mock data for roadmap generation");
-
       // Create mock data for the selected pillars
-      roadmapData = {
+      const roadmapData = {
         pillars: []
       };
       
@@ -220,7 +198,7 @@ const Home = () => {
             const endYear = currentYear + endYearOffset;
             
             // Generate stage content based on pillar type
-            let stageName, stageDescription, stageMilestones;
+            let stageName, stageMilestones;
             
             // Set stage name based on pillar type and stage index
             switch (pillarName) {
@@ -286,6 +264,7 @@ const Home = () => {
               focus = "product development";
             }
             
+            let stageDescription;
             if (i === 0) {
               stageDescription = `Assess current ${pillarName.toLowerCase()} capabilities and identify opportunities for ${focus} improvement.`;
             } else if (i === 1) {
@@ -389,445 +368,6 @@ const Home = () => {
       setIsLoading(false);
     }
   };
-            {
-              "name": "Governance",
-              "currentLevel": currentMaturity["Governance"] || 1,
-              "targetLevel": targetMaturity["Governance"] || 3,
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Governance Assessment",
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "description": "Assess current AI governance practices",
-                    "milestones": [
-                      "Review existing governance policies",
-                      "Identify governance gaps",
-                      "Benchmark against industry standards"
-                    ],
-                    "status": "in-progress"
-                  },
-                  {
-                    "name": "Framework Development",
-                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Develop AI governance framework",
-                    "milestones": [
-                      "Create AI ethics guidelines",
-                      "Develop responsible AI principles",
-                      "Design risk management approach"
-                    ],
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Implementation",
-                    "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Implement governance framework across organization",
-                    "milestones": [
-                      "Establish governance committee",
-                      "Roll out governance processes",
-                      "Train staff on compliance"
-                    ],
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Continuous Improvement",
-                    "startQuarter": `Q${currentQuarter + 4 > 4 ? currentQuarter + 4 - 4 : currentQuarter + 4} ${currentQuarter + 4 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 6 > 4 ? currentQuarter + 6 - 4 : currentQuarter + 6} ${currentQuarter + 6 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Continuously improve governance practices",
-                    "milestones": [
-                      "Regular governance reviews",
-                      "Update policies as needed",
-                      "Respond to regulatory changes"
-                    ],
-                    "status": "planned"
-                  }
-                ],
-                "kpis": [
-                  "AI risk assessment coverage",
-                  "Compliance with AI regulations",
-                  "Ethics violation incidents"
-                ]
-              }
-            },
-            {
-              "name": "Engineering",
-              "currentLevel": currentMaturity["Engineering"] || 1,
-              "targetLevel": targetMaturity["Engineering"] || 4,
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Engineering Assessment",
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "description": "Assess current AI engineering capabilities",
-                    "milestones": [
-                      "Audit AI development practices",
-                      "Review technical infrastructure",
-                      "Identify engineering gaps"
-                    ],
-                    "status": "in-progress"
-                  },
-                  {
-                    "name": "Foundation Building",
-                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Build foundational AI engineering capabilities",
-                    "milestones": [
-                      "Implement MLOps practices",
-                      "Establish development standards",
-                      "Build technical infrastructure"
-                    ],
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Scaling Capabilities",
-                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Scale AI engineering across organization",
-                    "milestones": [
-                      "Implement AI platforms",
-                      "Automate ML pipelines",
-                      "Enable self-service capabilities"
-                    ],
-                    "status": "planned"
-                  }
-                ],
-                "kpis": [
-                  "Model deployment cycle time",
-                  "AI system reliability metrics",
-                  "Engineering productivity metrics"
-                ]
-              }
-            },
-            {
-              "name": "Data",
-              "currentLevel": currentMaturity["Data"] || 1,
-              "targetLevel": targetMaturity["Data"] || 4,
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Data Assessment",
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "description": "Assess current data quality, governance, and infrastructure",
-                    "milestones": [
-                      "Conduct data quality audit",
-                      "Map data sources and flows",
-                      "Identify data gaps"
-                    ],
-                    "status": "in-progress"
-                  },
-                  {
-                    "name": "Data Foundation",
-                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Build foundational data capabilities",
-                    "milestones": [
-                      "Implement data governance",
-                      "Enhance data quality",
-                      "Develop data architecture"
-                    ],
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Advanced Data Capabilities",
-                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 4 > 4 ? currentQuarter + 4 - 4 : currentQuarter + 4} ${currentQuarter + 4 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Develop advanced data capabilities for AI",
-                    "milestones": [
-                      "Implement data catalogs",
-                      "Enable self-service analytics",
-                      "Develop data sharing capabilities"
-                    ],
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Data Excellence",
-                    "startQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 7 > 4 ? currentQuarter + 7 - 4 : currentQuarter + 7} ${currentQuarter + 7 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Achieve data excellence across organization",
-                    "milestones": [
-                      "Implement advanced data lifecycle management",
-                      "Achieve high data literacy",
-                      "Enable data-driven decision making"
-                    ],
-                    "status": "planned"
-                  }
-                ],
-                "kpis": [
-                  "Data quality score",
-                  "% of data accessible for AI models",
-                  "Data governance maturity"
-                ]
-              }
-            }
-          ]
-        };
-        
-        // Return the timeline data as a JSON string
-          "pillars": []
-        };
-        
-        // Add customized pillars based on user input
-        Object.entries(currentMaturity).forEach(([pillarName, currentLevel]) => {
-          if (targetMaturity[pillarName] && targetMaturity[pillarName] > currentLevel) {
-            const pillarData = createMockPillarData(
-              pillarName, 
-              currentLevel, 
-              targetMaturity[pillarName],
-              businessGoals
-            );
-            mockData.pillars.push(pillarData);
-          }
-        });
-        
-        text = JSON.stringify(mockData);
-      } else {
-        // Use the actual Google Gemini API
-        try {
-          const result = await model.generateContent(prompt);
-          const response = await result.response;
-          text = response.text();
-        } catch (apiError) {
-          console.error("API error:", apiError);
-          throw new Error(`API request failed: ${apiError.message}`);
-        }
-      }
-      
-      // Helper function to create realistic mock data for a pillar
-      function createMockPillarData(pillarName, currentLevel, targetLevel, businessGoals) {
-        // Get the current date for timeline calculations
-        const today = new Date();
-        const currentYear = today.getFullYear();
-        const currentQuarter = Math.floor(today.getMonth() / 3) + 1;
-        
-        // Calculate how many stages we need based on the gap between levels
-        const levelGap = targetLevel - currentLevel;
-        const numStages = Math.min(Math.max(levelGap + 1, 2), 4); // At least 2, at most 4 stages
-        
-        // Create stages with realistic timelines
-        const stages = [];
-        for (let i = 0; i < numStages; i++) {
-          const startQuarterOffset = i;
-          const endQuarterOffset = i + 1;
-          
-          const startQuarterNum = ((currentQuarter + startQuarterOffset - 1) % 4) + 1;
-          const startYearOffset = Math.floor((currentQuarter + startQuarterOffset - 1) / 4);
-          const startYear = currentYear + startYearOffset;
-          
-          const endQuarterNum = ((currentQuarter + endQuarterOffset - 1) % 4) + 1;
-          const endYearOffset = Math.floor((currentQuarter + endQuarterOffset - 1) / 4);
-          const endYear = currentYear + endYearOffset;
-          
-          const stage = {
-            "name": getStageNameForPillar(pillarName, i, numStages),
-            "startQuarter": `Q${startQuarterNum} ${startYear}`,
-            "endQuarter": `Q${endQuarterNum} ${endYear}`,
-            "description": getStageDescriptionForPillar(pillarName, i, numStages, businessGoals),
-            "milestones": getMilestonesForPillar(pillarName, i, numStages),
-            "status": i === 0 ? "in-progress" : "planned"
-          };
-          
-          stages.push(stage);
-        }
-        
-        return {
-          "name": pillarName,
-          "currentLevel": currentLevel,
-          "targetLevel": targetLevel,
-          "timelineData": {
-            "stages": stages,
-            "kpis": getKPIsForPillar(pillarName)
-          }
-        };
-      }
-      
-      // Helper functions to generate realistic content
-      function getStageNameForPillar(pillarName, stageIndex, totalStages) {
-        const stageNames = {
-          "AI Strategy": ["Assessment", "Strategy Development", "Implementation Planning", "Execution"],
-          "AI Value": ["Value Assessment", "Value Framework", "Value Measurement", "Value Optimization"],
-          "AI Organization": ["Organizational Assessment", "Org Design", "Implementation", "Optimization"],
-          "People & Culture": ["Skills Assessment", "Training Development", "Culture Change", "Excellence"],
-          "Governance": ["Governance Assessment", "Framework Development", "Implementation", "Continuous Improvement"],
-          "Engineering": ["Engineering Assessment", "Foundation Building", "Capability Scaling", "Engineering Excellence"],
-          "Data": ["Data Assessment", "Data Foundation", "Advanced Capabilities", "Data Excellence"]
-        };
-        
-        const names = stageNames[pillarName] || ["Assessment", "Planning", "Implementation", "Optimization"];
-        return names[stageIndex] || `Stage ${stageIndex + 1}`;
-      }
-      
-      function getStageDescriptionForPillar(pillarName, stageIndex, totalStages, businessGoals) {
-        const lowercaseGoals = businessGoals.toLowerCase();
-        const focusAreas = [];
-        
-        if (lowercaseGoals.includes("customer")) focusAreas.push("customer experience");
-        if (lowercaseGoals.includes("efficien")) focusAreas.push("operational efficiency");
-        if (lowercaseGoals.includes("cost")) focusAreas.push("cost reduction");
-        if (lowercaseGoals.includes("innovat")) focusAreas.push("innovation");
-        if (lowercaseGoals.includes("product")) focusAreas.push("product development");
-        
-        const focus = focusAreas.length > 0 ? 
-          focusAreas[Math.floor(Math.random() * focusAreas.length)] : 
-          "business value";
-        
-        const descriptions = {
-          0: `Assess current ${pillarName.toLowerCase()} capabilities and identify opportunities for ${focus} improvement.`,
-          1: `Develop comprehensive ${pillarName.toLowerCase()} framework and roadmap focused on ${focus}.`,
-          2: `Implement ${pillarName.toLowerCase()} initiatives across the organization to drive ${focus}.`,
-          3: `Optimize ${pillarName.toLowerCase()} capabilities and measure impact on ${focus}.`
-        };
-        
-        return descriptions[stageIndex] || `Stage ${stageIndex + 1} for ${pillarName}`;
-      }
-      
-      function getMilestonesForPillar(pillarName, stageIndex, totalStages) {
-        const milestonesByPillar = {
-          "AI Strategy": [
-            ["Document current AI initiatives", "Form AI strategy team", "Identify strategic gaps"],
-            ["Define AI vision and mission", "Create AI investment roadmap", "Identify strategic AI use cases"],
-            ["Prioritize AI initiatives", "Assign ownership and resources", "Establish success metrics"],
-            ["Launch pilot projects", "Scale successful initiatives", "Review and adjust strategy"]
-          ],
-          "AI Value": [
-            ["Document value measurement practices", "Identify value tracking gaps", "Benchmark against industry"],
-            ["Define value metrics and KPIs", "Create value tracking processes", "Develop ROI methodology"],
-            ["Implement value measurement", "Begin tracking initiative ROI", "Report on value creation"],
-            ["Optimize value delivery", "Implement value dashboards", "Drive continuous improvement"]
-          ],
-          "Data": [
-            ["Conduct data quality audit", "Map data sources and flows", "Identify data gaps"],
-            ["Implement data governance", "Enhance data quality", "Develop data architecture"],
-            ["Implement data catalogs", "Enable self-service analytics", "Enhance data integration"],
-            ["Advanced data lifecycle management", "Achieve high data literacy", "Enable predictive capabilities"]
-          ]
-        };
-        
-        // Generic milestones for pillars without specific ones
-        const genericMilestones = [
-            ["Document current state", "Identify gaps and opportunities", "Define baseline metrics"],
-            ["Develop framework", "Create implementation plan", "Define success metrics"],
-            ["Begin implementation", "Monitor progress", "Adjust approach as needed"],
-            ["Scale successful initiatives", "Measure outcomes", "Optimize and improve"]
-        ];
-        
-        const milestones = milestonesByPillar[pillarName] || genericMilestones;
-        return milestones[stageIndex] || ["Milestone 1", "Milestone 2", "Milestone 3"];
-      }
-      
-      function getKPIsForPillar(pillarName) {
-        const kpisByPillar = {
-          "AI Strategy": [
-            "% of business objectives supported by AI initiatives",
-            "AI investment ROI",
-            "Number of AI-enabled business processes"
-          ],
-          "AI Value": [
-            "Cost reduction attributed to AI",
-            "Revenue increase from AI initiatives", 
-            "Customer satisfaction improvements"
-          ],
-          "AI Organization": [
-            "% of departments with AI expertise",
-            "AI project delivery efficiency",
-            "Cross-functional collaboration metrics"
-          ],
-          "People & Culture": [
-            "% of employees with AI literacy",
-            "AI training completion rates",
-            "Employee AI adoption metrics"
-          ],
-          "Governance": [
-            "AI risk assessment coverage",
-            "Compliance with AI regulations",
-            "Ethics violation incidents"
-          ],
-          "Engineering": [
-            "Model deployment cycle time",
-            "AI system reliability metrics",
-            "Engineering productivity metrics"
-          ],
-          "Data": [
-            "Data quality score",
-            "% of data accessible for AI models",
-            "Data governance maturity"
-          ]
-        };
-        
-        return kpisByPillar[pillarName] || [
-          "Implementation success rate",
-          "Process efficiency improvement",
-          "Business impact metrics"
-        ];
-      }
-      
-      // Parse the JSON response
-      try {
-        // Extract JSON from the response (in case there's additional text)
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        const jsonString = jsonMatch ? jsonMatch[0] : text;
-        const roadmapData = JSON.parse(jsonString);
-        
-        setRoadmap(roadmapData);
-        
-        // If using the default key, mark the free query as used
-        if (useDefaultKey) {
-          console.log("Using default key - marking free query as used");
-          setFreeQueryAsUsed();
-        }
-        
-        // If using a custom API key, store it in state (but not in localStorage for privacy)
-        if (apiKey.trim()) {
-          console.log("Using custom API key - storing in component state");
-        }
-      } catch (parseError) {
-        console.error('Failed to parse AI response:', parseError);
-        setError('Failed to parse the AI response. Please try again.');
-      }
-    } catch (err) {
-      console.error('Error generating roadmap:', err);
-      setError('Error generating roadmap. Please check your API key and try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Check if there's enough data to generate a roadmap
-  const canGenerateRoadmap = () => {
-    // Debug the inputs
-    console.log("Checking if can generate roadmap:");
-    console.log("Business goals:", businessGoals.trim().length > 0);
-    console.log("API key provided:", apiKey.trim().length > 0);
-    
-    // If user has already provided their own API key and business goals, enable the button
-    if (apiKey.trim().length > 0 && businessGoals.trim().length > 0) {
-      console.log("User provided API key and business goals - enabling generation");
-      return true;
-    }
-    
-    if (Object.keys(currentMaturity).length === 0) {
-      console.log("No current maturity levels set");
-      return false;
-    }
-    
-    // Check each pillar to find at least one valid pair
-    const validPillars = Object.keys(currentMaturity).filter(pillar => {
-      const current = currentMaturity[pillar];
-      const target = targetMaturity[pillar];
-      const isValid = current !== undefined && target !== undefined && target > current;
-      console.log(`Pillar ${pillar}: current=${current}, target=${target}, valid=${isValid}`);
-      return isValid;
-    });
-    
-    const hasValidMaturityPairs = validPillars.length > 0;
-    console.log("Valid pillars:", validPillars);
-    console.log("Has valid maturity pairs:", hasValidMaturityPairs);
-    
-    return businessGoals.trim().length > 0 && hasValidMaturityPairs;
-  };
 
   // BYOKModal Component
   const BYOKModal = () => (
@@ -906,8 +446,8 @@ const Home = () => {
           <button 
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={() => {
+              console.log("API key provided in modal:", apiKey.trim().length > 0);
               if (apiKey.trim()) {
-                console.log("API key provided in modal:", apiKey.trim().length > 0);
                 setShowBYOKModal(false);
                 // Short delay to ensure state is updated
                 setTimeout(() => {
