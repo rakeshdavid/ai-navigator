@@ -233,10 +233,42 @@ const Home = () => {
                   ["Launch pilot projects", "Scale successful initiatives", "Review and adjust strategy"]
                 ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
                 break;
-                      "Launch awareness campaigns"
-                    ],
-                    "status": "planned"
-                  },
+              case "Data":
+                stageName = ["Data Assessment", "Data Foundation", "Advanced Capabilities", "Data Excellence"][i] || `Stage ${i+1}`;
+                stageMilestones = [
+                  ["Conduct data quality audit", "Map data sources and flows", "Identify data gaps"],
+                  ["Implement data governance", "Enhance data quality", "Develop data architecture"],
+                  ["Implement data catalogs", "Enable self-service analytics", "Enhance data integration"],
+                  ["Advanced data lifecycle management", "Achieve high data literacy", "Enable predictive capabilities"]
+                ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
+                break;
+              case "Governance":
+                stageName = ["Governance Assessment", "Framework Development", "Implementation", "Continuous Improvement"][i] || `Stage ${i+1}`;
+                stageMilestones = [
+                  ["Review existing governance policies", "Identify governance gaps", "Benchmark against industry standards"],
+                  ["Create AI ethics guidelines", "Develop responsible AI principles", "Design risk management approach"],
+                  ["Establish governance committee", "Roll out governance processes", "Train staff on compliance"],
+                  ["Regular governance reviews", "Update policies as needed", "Respond to regulatory changes"]
+                ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
+                break;
+              case "People & Culture":
+                stageName = ["Skills Assessment", "Training Development", "Culture Change", "Excellence"][i] || `Stage ${i+1}`;
+                stageMilestones = [
+                  ["Complete AI skills inventory", "Assess AI cultural readiness", "Identify skill gaps"],
+                  ["Create AI learning paths", "Implement training platforms", "Launch awareness campaigns"],
+                  ["Implement change management", "Create AI champions network", "Recognize AI achievements"],
+                  ["Advanced skill development", "Measure culture transformation", "Continuous learning"]
+                ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
+                break;
+              default:
+                stageName = ["Assessment", "Planning", "Implementation", "Optimization"][i] || `Stage ${i+1}`;
+                stageMilestones = [
+                  ["Document current state", "Identify gaps and opportunities", "Define baseline metrics"],
+                  ["Develop framework", "Create implementation plan", "Define success metrics"],
+                  ["Begin implementation", "Monitor progress", "Adjust approach as needed"],
+                  ["Scale successful initiatives", "Measure outcomes", "Optimize and improve"]
+                ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
+            }
                   {
                     "name": "Culture Transformation",
                     "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
