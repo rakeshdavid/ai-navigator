@@ -59,10 +59,32 @@ const Home = () => {
 
   // Handle maturity level changes
   const handleMaturityChange = (pillar, value, type) => {
+    const numValue = parseInt(value);
+    console.log(`Handling ${type} maturity change for ${pillar} to ${numValue}`);
+    
     if (type === 'current') {
-      setCurrentMaturity({ ...currentMaturity, [pillar]: value });
+      setCurrentMaturity(prev => {
+        const updated = { ...prev, [pillar]: numValue };
+        console.log('Updated currentMaturity:', updated);
+        return updated;
+      });
+      
+      // If target is not set or less than new current value, update target too
+      if (!targetMaturity[pillar] || targetMaturity[pillar] <= numValue) {
+        setTargetMaturity(prev => {
+          // Set target to current + 1 (or 5 max)
+          const newTarget = Math.min(numValue + 1, 5);
+          const updated = { ...prev, [pillar]: newTarget };
+          console.log('Auto-updated targetMaturity:', updated);
+          return updated;
+        });
+      }
     } else {
-      setTargetMaturity({ ...targetMaturity, [pillar]: value });
+      setTargetMaturity(prev => {
+        const updated = { ...prev, [pillar]: numValue };
+        console.log('Updated targetMaturity:', updated);
+        return updated;
+      });
     }
   };
 
