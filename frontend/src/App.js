@@ -47,11 +47,39 @@ const Home = () => {
   const [apiKeyProvider, setApiKeyProvider] = useState('gemini');
   const [showBYOKModal, setShowBYOKModal] = useState(false);
   
+  // Check if there's enough data to generate a roadmap
+  const canGenerateRoadmap = () => {
+    // Debug the inputs
+    console.log("Checking if can generate roadmap:");
+    console.log("Business goals:", businessGoals.trim().length > 0);
+    
+    if (Object.keys(currentMaturity).length === 0) {
+      console.log("No current maturity levels set");
+      return false;
+    }
+    
+    // Check each pillar to find at least one valid pair
+    const validPillars = Object.keys(currentMaturity).filter(pillar => {
+      const current = currentMaturity[pillar];
+      const target = targetMaturity[pillar];
+      const isValid = current !== undefined && target !== undefined && target > current;
+      console.log(`Pillar ${pillar}: current=${current}, target=${target}, valid=${isValid}`);
+      return isValid;
+    });
+    
+    const hasValidMaturityPairs = validPillars.length > 0;
+    console.log("Valid pillars:", validPillars);
+    console.log("Has valid maturity pairs:", hasValidMaturityPairs);
+    
+    return businessGoals.trim().length > 0 && hasValidMaturityPairs;
+  };
+  
   // Debug state for development
   useEffect(() => {
     console.log("Current Maturity:", currentMaturity);
     console.log("Target Maturity:", targetMaturity);
-    console.log("Can Generate:", canGenerateRoadmap());
+    const canGenerate = canGenerateRoadmap();
+    console.log("Can Generate:", canGenerate);
   }, [currentMaturity, targetMaturity, businessGoals]);
 
   // Handle maturity level changes
