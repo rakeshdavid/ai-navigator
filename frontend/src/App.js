@@ -363,10 +363,24 @@ const Home = () => {
               kpis: kpis
             }
           });
-                      "Recognize AI achievements"
-                    ],
-                    "status": "planned"
-                  }
+        }
+      });
+      
+      console.log("Generated roadmap data:", roadmapData);
+      
+      // Set the roadmap data
+      setRoadmap(roadmapData);
+      
+      // If using the default key, mark the free query as used
+      if (useDefaultKey) {
+        console.log("Using default key - marking free query as used");
+        setFreeQueryAsUsed();
+      }
+      
+      // If using a custom API key, store it in state (but not in localStorage for privacy)
+      if (apiKey.trim()) {
+        console.log("Using custom API key - storing in component state");
+      }
                 ],
                 "kpis": [
                   "% of employees with AI literacy",
