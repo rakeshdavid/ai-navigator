@@ -208,10 +208,6 @@ const Home = () => {
             mockData.pillars.push(pillarData);
           }
         });
-            {
-              "name": "AI Strategy",
-              "currentLevel": currentMaturity["AI Strategy"] || 1,
-              "targetLevel": targetMaturity["AI Strategy"] || 3,
               "timelineData": {
                 "stages": [
                   {
