@@ -381,10 +381,13 @@ const Home = () => {
       if (apiKey.trim()) {
         console.log("Using custom API key - storing in component state");
       }
-                ],
-                "kpis": [
-                  "% of employees with AI literacy",
-                  "AI training completion rates",
+      
+    } catch (err) {
+      console.error('Error generating roadmap:', err);
+      setError('Error generating roadmap. Please check your API key and try again.');
+    } finally {
+      setIsLoading(false);
+    }
                   "Employee AI adoption metrics"
                 ]
               }
