@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "description": "Assess existing AI capabilities and alignment with business strategy",
-                    "milestones": [
                       "Create AI strategy steering committee",
                       "Complete AI capabilities assessment",
                       "Document current AI initiatives"
