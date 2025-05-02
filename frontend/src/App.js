@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "description": "Continuously optimize AI value realization",
-                    "milestones": [
-                      "Implement value tracking dashboards",
-                      "Regular value review meetings",
                       "Adjust initiatives based on value delivery"
                     ],
                     "status": "planned"
