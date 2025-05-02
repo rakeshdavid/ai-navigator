@@ -95,6 +95,11 @@ const Home = () => {
       }
 
       // Create the prompt for the AI
+      // Get the current date for timeline calculations
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const currentQuarter = Math.floor(today.getMonth() / 3) + 1;
+
       const prompt = `
         As an AI maturity consultant, create a detailed roadmap based on the following information:
         
@@ -106,10 +111,7 @@ const Home = () => {
         Target Maturity Levels:
         ${Object.entries(targetMaturity).map(([pillar, level]) => `${pillar}: ${level} - ${MATURITY_LEVELS.find(l => l.value === level)?.label}`).join('\n')}
         
-        For each pillar that has both current and target maturity levels defined, please create:
-        1. A timeline with key milestones to reach the target level
-        2. Specific actions and initiatives required to progress
-        3. Key performance indicators to measure progress
+        For each pillar that has both current and target maturity levels defined, please create a detailed roadmap with stages, timelines, milestones, and KPIs.
         
         Format your response as JSON with the following structure:
         {
@@ -118,20 +120,28 @@ const Home = () => {
               "name": "Pillar Name",
               "currentLevel": number,
               "targetLevel": number,
-              "milestones": [
-                {
-                  "title": "Milestone title",
-                  "description": "Detailed description",
-                  "timeline": "Q1 2025", 
-                  "actions": ["Action 1", "Action 2"]
-                }
-              ],
-              "kpis": ["KPI 1", "KPI 2"]
+              "timelineData": {
+                "stages": [
+                  {
+                    "name": "Stage Name",
+                    "startQuarter": "Q1 2025",
+                    "endQuarter": "Q2 2025",
+                    "description": "Detailed description of this stage",
+                    "milestones": ["Milestone 1", "Milestone 2"],
+                    "status": "in-progress"
+                  }
+                ],
+                "kpis": ["KPI 1", "KPI 2"]
+              }
             }
           ]
         }
         
-        Focus on practical, actionable advice specific to each pillar's maturity journey.
+        The roadmap should follow the Gartner AI Maturity Model framework. Start from the current quarter (Q${currentQuarter} ${currentYear}) and map out a realistic timeline to reach the target maturity level for each pillar.
+        
+        For the status of each stage, use "in-progress" for the first stage, and "planned" for all subsequent stages.
+        
+        Focus on practical, actionable advice specific to each pillar's maturity journey. The roadmap should enable the organization to systematically progress from their current maturity level to their target level over a realistic timeframe.
       `;
 
       // Initialize the Generative AI
