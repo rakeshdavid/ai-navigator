@@ -305,10 +305,64 @@ const Home = () => {
               milestones: stageMilestones,
               status: i === 0 ? "in-progress" : "planned"
             });
-                    "description": "Foster AI-positive culture across organization",
-                    "milestones": [
-                      "Implement change management",
-                      "Create AI champions network",
+          }
+          
+          // Define KPIs based on pillar type
+          let kpis;
+          switch(pillarName) {
+            case "AI Strategy":
+              kpis = [
+                "% of business objectives supported by AI initiatives",
+                "AI investment ROI",
+                "Number of AI-enabled business processes"
+              ];
+              break;
+            case "AI Value":
+              kpis = [
+                "Cost reduction attributed to AI",
+                "Revenue increase from AI initiatives", 
+                "Customer satisfaction improvements"
+              ];
+              break;
+            case "Data":
+              kpis = [
+                "Data quality score",
+                "% of data accessible for AI models",
+                "Data governance maturity"
+              ];
+              break;
+            case "Governance":
+              kpis = [
+                "AI risk assessment coverage",
+                "Compliance with AI regulations",
+                "Ethics violation incidents"
+              ];
+              break;
+            case "People & Culture":
+              kpis = [
+                "% of employees with AI literacy",
+                "AI training completion rates",
+                "Employee AI adoption metrics"
+              ];
+              break;
+            default:
+              kpis = [
+                "Implementation success rate",
+                "Process efficiency improvement",
+                "Business impact metrics"
+              ];
+          }
+          
+          // Add the pillar to our roadmap data
+          roadmapData.pillars.push({
+            name: pillarName,
+            currentLevel: currentLevel,
+            targetLevel: targetLevel,
+            timelineData: {
+              stages: stages,
+              kpis: kpis
+            }
+          });
                       "Recognize AI achievements"
                     ],
                     "status": "planned"
