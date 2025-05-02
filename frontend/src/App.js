@@ -36,6 +36,7 @@ const setFreeQueryAsUsed = () => {
 
 // Home Component
 const Home = () => {
+  // Initialize component state with empty values
   const [businessGoals, setBusinessGoals] = useState('');
   const [currentMaturity, setCurrentMaturity] = useState({});
   const [targetMaturity, setTargetMaturity] = useState({});
