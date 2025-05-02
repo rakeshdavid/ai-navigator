@@ -3,7 +3,9 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { FaLock, FaInfoCircle, FaDownload } from 'react-icons/fa';
+import { FaLock, FaInfoCircle, FaDownload, FaCheckCircle, FaExclamationTriangle, FaCog } from 'react-icons/fa';
+import { add, format, parseISO } from 'date-fns';
+import moment from 'moment';
 
 // Constants
 const GARTNER_PILLARS = [
