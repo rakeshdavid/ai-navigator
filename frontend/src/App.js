@@ -460,7 +460,7 @@ const Home = () => {
               targetMaturity[pillarName],
               businessGoals
             );
-            timelineData.pillars.push(pillarData);
+            mockData.pillars.push(pillarData);
           }
         });
         
