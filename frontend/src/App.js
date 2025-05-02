@@ -128,9 +128,61 @@ const Home = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       
       // Generate content
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      let text;
+      
+      // If using the dummy key, return a mock response for development/testing
+      if (key === "DUMMY_KEY_FOR_TESTING") {
+        // Create a realistic mock response based on the input
+        text = JSON.stringify({
+          "pillars": [
+            {
+              "name": "AI Strategy",
+              "currentLevel": currentMaturity["AI Strategy"] || 1,
+              "targetLevel": targetMaturity["AI Strategy"] || 3,
+              "milestones": [
+                {
+                  "title": "Strategy Foundation",
+                  "description": "Establish core AI strategy aligned with business goals",
+                  "timeline": "Q2 2025",
+                  "actions": ["Define AI vision and mission", "Identify key business problems for AI"]
+                },
+                {
+                  "title": "Strategy Implementation",
+                  "description": "Begin executing AI strategy across selected business units",
+                  "timeline": "Q3 2025",
+                  "actions": ["Launch pilot projects", "Measure initial results and adjust strategy"]
+                }
+              ],
+              "kpis": ["% of business units with AI projects", "ROI of AI initiatives"]
+            },
+            {
+              "name": "Data",
+              "currentLevel": currentMaturity["Data"] || 1,
+              "targetLevel": targetMaturity["Data"] || 3,
+              "milestones": [
+                {
+                  "title": "Data Assessment",
+                  "description": "Evaluate current data quality, governance, and infrastructure",
+                  "timeline": "Q2 2025",
+                  "actions": ["Conduct data quality audit", "Identify data gaps and opportunities"]
+                },
+                {
+                  "title": "Data Transformation",
+                  "description": "Implement data governance and improve data quality",
+                  "timeline": "Q4 2025",
+                  "actions": ["Establish data governance framework", "Develop data quality metrics"]
+                }
+              ],
+              "kpis": ["Data quality score", "% of data accessible for AI models"]
+            }
+          ]
+        });
+      } else {
+        // Use the actual API
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        text = response.text();
+      }
       
       // Parse the JSON response
       try {
