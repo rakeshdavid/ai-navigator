@@ -28,11 +28,13 @@ const MATURITY_LEVELS = [
 
 // Helper to check if the free query has been used
 const hasUsedFreeQuery = () => {
+  console.log("Checking localStorage for hasUsedFreeQuery:", localStorage.getItem('hasUsedFreeQuery'));
   return localStorage.getItem('hasUsedFreeQuery') === 'true';
 };
 
 // Helper to set the free query as used
 const setFreeQueryAsUsed = () => {
+  console.log("Setting free query as used in localStorage");
   localStorage.setItem('hasUsedFreeQuery', 'true');
 };
 
