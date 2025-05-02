@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                  {
-                    "name": "Value Optimization",
-                    "startQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
                     "description": "Continuously optimize AI value realization",
                     "milestones": [
                       "Implement value tracking dashboards",
