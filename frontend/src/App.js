@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "description": "Assess current organizational structure and AI capabilities",
-                    "milestones": [
                       "Map existing AI roles and teams",
                       "Identify organizational gaps",
                       "Review governance structure"
