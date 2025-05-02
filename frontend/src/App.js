@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Organizational Assessment",
                     "startQuarter": `Q${currentQuarter} ${currentYear}`,
                     "endQuarter": `Q${currentQuarter} ${currentYear}`,
                     "description": "Assess current organizational structure and AI capabilities",
