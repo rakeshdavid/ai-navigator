@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "status": "planned"
-                  }
-                ],
-                "kpis": [
                   "% of business objectives supported by AI initiatives",
                   "AI investment ROI",
                   "Number of AI-enabled business processes"
