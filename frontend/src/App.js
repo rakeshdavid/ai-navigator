@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Adjust initiatives based on value delivery"
-                    ],
-                    "status": "planned"
-                  }
                 ],
                 "kpis": [
                   "Cost reduction attributed to AI",
