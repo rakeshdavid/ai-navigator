@@ -218,10 +218,21 @@ const Home = () => {
             const endQuarterNum = ((currentQuarter + endQuarterOffset - 1) % 4) + 1;
             const endYearOffset = Math.floor((currentQuarter + endQuarterOffset - 1) / 4);
             const endYear = currentYear + endYearOffset;
-                    "description": "Develop AI training and upskilling programs",
-                    "milestones": [
-                      "Create AI learning paths",
-                      "Implement training platforms",
+            
+            // Generate stage content based on pillar type
+            let stageName, stageDescription, stageMilestones;
+            
+            // Set stage name based on pillar type and stage index
+            switch (pillarName) {
+              case "AI Strategy":
+                stageName = ["Assessment", "Strategy Development", "Implementation Planning", "Execution"][i] || `Stage ${i+1}`;
+                stageMilestones = [
+                  ["Document current AI initiatives", "Form AI strategy team", "Identify strategic gaps"],
+                  ["Define AI vision and mission", "Create AI investment roadmap", "Identify strategic AI use cases"],
+                  ["Prioritize AI initiatives", "Assign ownership and resources", "Establish success metrics"],
+                  ["Launch pilot projects", "Scale successful initiatives", "Review and adjust strategy"]
+                ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
+                break;
                       "Launch awareness campaigns"
                     ],
                     "status": "planned"
