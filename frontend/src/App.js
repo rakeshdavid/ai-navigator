@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Prioritize AI use cases",
-                      "Assign ownership and resources",
-                      "Establish success metrics"
-                    ],
                     "status": "planned"
                   },
                   {
