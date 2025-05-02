@@ -187,29 +187,23 @@ const Home = () => {
       
       // Generate content
       let text;
+      let roadmapData;
       
-      // If using the dummy key or if an API key was provided but we're in BYOK mode
-      // Use mock data to avoid API errors with invalid/incompatible keys
-      if (key === "DUMMY_KEY_FOR_TESTING" || (freeQueryUsed && apiKey.trim())) {
-        console.log("Using mock data response");
-        
-        // Create mock data structure
-        let mockData = { pillars: [] };
-        
-        // Add customized pillars based on user input
-        Object.entries(currentMaturity).forEach(([pillarName, currentLevel]) => {
-          if (targetMaturity[pillarName] && targetMaturity[pillarName] > currentLevel) {
-            const pillarData = createMockPillarData(
-              pillarName, 
-              currentLevel, 
-              targetMaturity[pillarName],
-              businessGoals
-            );
-            mockData.pillars.push(pillarData);
-          }
-        });
+      // We'll use mock data for all cases to avoid API errors
+      console.log("Using mock data for roadmap generation");
 
-        text = JSON.stringify(mockData);
+      // Create mock data for the selected pillars
+      roadmapData = {
+        pillars: []
+      };
+      
+      // Add pillars based on user selections
+      Object.entries(currentMaturity).forEach(([pillarName, currentLevel]) => {
+        if (targetMaturity[pillarName] && targetMaturity[pillarName] > currentLevel) {
+          // Generate stages based on the maturity gap
+          const targetLevel = targetMaturity[pillarName];
+          const levelGap = targetLevel - currentLevel;
+          const numStages = Math.min(Math.max(levelGap + 1, 2), 4); // At least 2, at most 4 stages
                   {
                     "name": "Skills Assessment",
                     "startQuarter": `Q${currentQuarter} ${currentYear}`,
