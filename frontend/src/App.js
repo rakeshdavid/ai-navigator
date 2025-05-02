@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Implementation",
                     "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
                     "endQuarter": `Q${currentQuarter + 4 > 4 ? currentQuarter + 4 - 4 : currentQuarter + 4} ${currentQuarter + 4 > 4 ? currentYear + 1 : currentYear}`,
                     "description": "Implement new AI organizational structure",
