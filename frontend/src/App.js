@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "status": "planned"
-                  },
-                  {
-                    "name": "Implementation Planning",
                     "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
                     "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
                     "description": "Develop implementation plans for AI initiatives",
