@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Define AI roles and responsibilities",
-                      "Develop AI center of excellence model",
-                      "Create AI governance framework"
-                    ],
                     "status": "planned"
                   },
                   {
