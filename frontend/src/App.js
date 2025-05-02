@@ -388,10 +388,7 @@ const Home = () => {
     } finally {
       setIsLoading(false);
     }
-                  "Employee AI adoption metrics"
-                ]
-              }
-            },
+  };
             {
               "name": "Governance",
               "currentLevel": currentMaturity["Governance"] || 1,
