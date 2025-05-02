@@ -9,10 +9,13 @@ class AINavigatorAPITester:
         self.tests_run = 0
         self.tests_passed = 0
 
-    def run_test(self, name, method, endpoint, expected_status, data=None):
+    def run_test(self, name, method, endpoint, expected_status, data=None, headers=None):
         """Run a single API test"""
         url = f"{self.base_url}/{endpoint}"
-        headers = {'Content-Type': 'application/json'}
+        if headers is None:
+            headers = {'Content-Type': 'application/json'}
+        else:
+            headers['Content-Type'] = 'application/json'
 
         self.tests_run += 1
         print(f"\n🔍 Testing {name}...")
@@ -73,15 +76,64 @@ class AINavigatorAPITester:
             200,
             data=data
         )
+    
+    def test_generate_roadmap_free_query(self):
+        """Test generating a roadmap with the free query"""
+        data = {
+            "business_goals": "Improve customer service with AI",
+            "maturity_levels": {
+                "AI Strategy": {"current": 1, "target": 3},
+                "AI Value": {"current": 1, "target": 3},
+                "AI Organization": {"current": 1, "target": 3},
+                "People & Culture": {"current": 1, "target": 3}
+            }
+        }
+        return self.run_test(
+            "Generate Roadmap (Free Query)",
+            "POST",
+            "api/generate",
+            200,
+            data=data
+        )
+    
+    def test_generate_roadmap_with_api_key(self):
+        """Test generating a roadmap with a provided API key"""
+        data = {
+            "business_goals": "Improve customer service with AI",
+            "maturity_levels": {
+                "AI Strategy": {"current": 1, "target": 3},
+                "AI Value": {"current": 1, "target": 3},
+                "AI Organization": {"current": 1, "target": 3},
+                "People & Culture": {"current": 1, "target": 3}
+            }
+        }
+        headers = {
+            "X-API-Key": "test-key-123",
+            "X-API-Provider": "gemini"
+        }
+        return self.run_test(
+            "Generate Roadmap (With API Key)",
+            "POST",
+            "api/generate",
+            200,
+            data=data,
+            headers=headers
+        )
 
 def main():
     # Setup
     tester = AINavigatorAPITester()
     
-    # Run tests
+    # Run basic API tests
+    print("\n=== Basic API Tests ===")
     tester.test_root_endpoint()
     tester.test_status_endpoint()
     tester.test_create_status()
+    
+    # Run BYOK functionality tests
+    print("\n=== BYOK Functionality Tests ===")
+    tester.test_generate_roadmap_free_query()
+    tester.test_generate_roadmap_with_api_key()
 
     # Print results
     print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
