@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Define AI vision and principles",
-                      "Create AI investment roadmap",
-                      "Identify strategic AI use cases"
-                    ],
                     "status": "planned"
                   },
                   {
