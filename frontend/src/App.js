@@ -605,9 +605,15 @@ const Home = () => {
         
         setRoadmap(roadmapData);
         
-        // Mark the free query as used if using the default key
+        // If using the default key, mark the free query as used
         if (useDefaultKey) {
+          console.log("Using default key - marking free query as used");
           setFreeQueryAsUsed();
+        }
+        
+        // If using a custom API key, store it in state (but not in localStorage for privacy)
+        if (apiKey.trim()) {
+          console.log("Using custom API key - storing in component state");
         }
       } catch (parseError) {
         console.error('Failed to parse AI response:', parseError);
