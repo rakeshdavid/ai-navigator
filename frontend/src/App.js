@@ -1080,7 +1080,7 @@ const Home = () => {
                 <div>
                   <h4 className="font-medium mb-1">Free Query Used</h4>
                   <p className="text-sm mb-3">
-                    You've used your free query. Please provide your own API key to continue.
+                    You've used your free query. Please provide your own API key to continue. Make sure you've also entered your business goals above.
                   </p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
