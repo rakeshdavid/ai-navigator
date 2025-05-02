@@ -188,6 +188,7 @@ const Home = () => {
       // Generate content
       let text;
       let roadmapData;
+      let roadmapData;
       
       // We'll use mock data for all cases to avoid API errors
       console.log("Using mock data for roadmap generation");
