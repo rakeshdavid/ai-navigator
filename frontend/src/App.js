@@ -210,14 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "status": "planned"
-                  }
-                ],
-                "kpis": [
-                  "% of departments with AI expertise",
-                  "AI project delivery efficiency",
-                  "Cross-functional collaboration metrics"
-                ]
               }
             },
             {
