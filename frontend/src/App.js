@@ -103,22 +103,28 @@ const Home = () => {
     setError(null);
 
     try {
-      const useDefaultKey = !hasUsedFreeQuery() && !apiKey;
-      // Use the environment variable correctly
+      const freeQueryUsed = hasUsedFreeQuery();
+      console.log("When generating roadmap, free query used status:", freeQueryUsed);
+      
+      // Determine which key to use
+      const useDefaultKey = !freeQueryUsed && !apiKey.trim();
       let key = useDefaultKey ? process.env.REACT_APP_GEMINI_API_KEY : apiKey;
       
       // Debugging
       console.log("Using default key:", useDefaultKey);
-      console.log("Has used free query:", hasUsedFreeQuery());
+      console.log("Has used free query:", freeQueryUsed);
       console.log("API key available:", key ? "Yes" : "No");
+      console.log("User provided API key:", apiKey.trim() || "None");
       
       // For development/testing, if no key is available in the env var, use a placeholder
       if (useDefaultKey && !key) {
-        // Use a dummy key for development/testing
+        console.log("Using dummy key for testing");
         key = "DUMMY_KEY_FOR_TESTING";
       }
       
-      if (!key) {
+      // If we need a key but don't have one, show the BYOK modal
+      if (freeQueryUsed && !apiKey.trim()) {
+        console.log("Free query used but no API key provided - showing BYOK modal");
         setError('API key is required. Please provide your own API key.');
         setShowBYOKModal(true);
         setIsLoading(false);
