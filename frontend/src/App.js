@@ -148,7 +148,10 @@ const Home = () => {
   // Check if there's enough data to generate a roadmap
   const canGenerateRoadmap = () => {
     const hasValidMaturityPairs = Object.keys(currentMaturity).some(
-      pillar => targetMaturity[pillar] && targetMaturity[pillar] > currentMaturity[pillar]
+      pillar => 
+        currentMaturity[pillar] !== undefined && 
+        targetMaturity[pillar] !== undefined && 
+        targetMaturity[pillar] > currentMaturity[pillar]
     );
     return businessGoals.trim().length > 0 && hasValidMaturityPairs;
   };
