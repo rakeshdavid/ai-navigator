@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Benchmark against industry standards"
-                    ],
-                    "status": "in-progress"
-                  },
                   {
                     "name": "Value Framework Development",
                     "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
