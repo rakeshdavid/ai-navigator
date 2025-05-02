@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Create AI strategy steering committee",
-                      "Complete AI capabilities assessment",
-                      "Document current AI initiatives"
-                    ],
                     "status": "in-progress"
                   },
                   {
