@@ -1,38 +1,70 @@
 .App {
-    text-align: center;
+  min-height: 100vh;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+.roadmap-container {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.roadmap-timeline {
+  position: relative;
+  padding-left: 24px;
+  border-left: 2px solid #e5e7eb;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.roadmap-item {
+  position: relative;
+  margin-left: 16px;
 }
 
-.App-link {
-    color: #61dafb;
+.roadmap-item::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  left: -25px;
+  top: 24px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+@media (min-width: 768px) {
+  .roadmap-container {
+    padding: 2rem;
+  }
+}
+
+/* Transitions for better UX */
+.roadmap-item {
+  transition: all 0.3s ease;
+}
+
+.roadmap-item:hover {
+  transform: translateX(4px);
+}
+
+/* Custom styling for the chart */
+.recharts-default-tooltip {
+  background-color: #fff !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  padding: 10px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Animation for new content */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.roadmap-container {
+  animation: fadeIn 0.5s ease-out;
 }
