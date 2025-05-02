@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                ],
-                "kpis": [
-                  "Cost reduction attributed to AI",
-                  "Revenue increase from AI initiatives",
                   "Customer satisfaction improvements"
                 ]
               }
