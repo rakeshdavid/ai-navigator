@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-              }
-            },
-            {
-              "name": "AI Value",
               "currentLevel": currentMaturity["AI Value"] || 1,
               "targetLevel": targetMaturity["AI Value"] || 4,
               "timelineData": {
