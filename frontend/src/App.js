@@ -701,73 +701,203 @@ const Home = () => {
     </div>
   );
 
-  // Render the roadmap timeline
+  // Render the roadmap timeline as a Gantt chart
   const RoadmapTimeline = ({ data }) => {
     if (!data || !data.pillars || data.pillars.length === 0) {
       return <div className="text-center py-8">No roadmap data available</div>;
     }
-
+    
+    // Get all unique quarters from the data for the timeline header
+    const allQuarters = new Set();
+    data.pillars.forEach(pillar => {
+      if (pillar.timelineData && pillar.timelineData.stages) {
+        pillar.timelineData.stages.forEach(stage => {
+          // Convert "Q1 2025" format to a sortable format like "2025-1"
+          const startParts = stage.startQuarter.split(' ');
+          const endParts = stage.endQuarter.split(' ');
+          
+          if (startParts.length === 2 && endParts.length === 2) {
+            const startQuarter = parseInt(startParts[0].replace('Q', ''));
+            const startYear = parseInt(startParts[1]);
+            const endQuarter = parseInt(endParts[0].replace('Q', ''));
+            const endYear = parseInt(endParts[1]);
+            
+            // Add all quarters between start and end
+            for (let year = startYear; year <= endYear; year++) {
+              const startQ = (year === startYear) ? startQuarter : 1;
+              const endQ = (year === endYear) ? endQuarter : 4;
+              
+              for (let q = startQ; q <= endQ; q++) {
+                allQuarters.add(`${year}-${q}`);
+              }
+            }
+          }
+        });
+      }
+    });
+    
+    // Convert to array and sort chronologically
+    const sortedQuarters = Array.from(allQuarters)
+      .sort((a, b) => {
+        const [yearA, quarterA] = a.split('-').map(Number);
+        const [yearB, quarterB] = b.split('-').map(Number);
+        
+        if (yearA !== yearB) {
+          return yearA - yearB;
+        }
+        return quarterA - quarterB;
+      });
+    
+    // Convert back to display format "Q1 2025"
+    const displayQuarters = sortedQuarters.map(q => {
+      const [year, quarter] = q.split('-');
+      return `Q${quarter} ${year}`;
+    });
+    
+    // Define colors for different statuses
+    const statusColors = {
+      'in-progress': 'bg-blue-500',
+      'planned': 'bg-gray-300',
+      'completed': 'bg-green-500',
+      'delayed': 'bg-yellow-500',
+      'at-risk': 'bg-red-400'
+    };
+    
+    // Status icons
+    const statusIcons = {
+      'in-progress': <FaCog className="animate-spin" />,
+      'planned': <FaInfoCircle />,
+      'completed': <FaCheckCircle />,
+      'at-risk': <FaExclamationTriangle />
+    };
+    
+    // Helper function to get the quarter index in our timeline
+    const getQuarterIndex = (quarterStr) => {
+      return displayQuarters.findIndex(q => q === quarterStr);
+    };
+    
+    // Helper function to calculate stage width based on start and end quarters
+    const calculateStageWidth = (startQuarter, endQuarter) => {
+      const startIdx = getQuarterIndex(startQuarter);
+      const endIdx = getQuarterIndex(endQuarter);
+      
+      if (startIdx === -1 || endIdx === -1) return 1; // Default to 1 if not found
+      
+      // Width is the span plus 1 (to include the end quarter)
+      return endIdx - startIdx + 1;
+    };
+    
     return (
-      <div className="roadmap-container p-4">
+      <div className="gantt-chart-container p-4 overflow-x-auto">
         <h2 className="text-2xl font-bold mb-6">AI Maturity Roadmap</h2>
         
-        {data.pillars.map((pillar, pillarIndex) => (
-          <div key={pillarIndex} className="mb-10">
-            <div className="flex items-center mb-2">
-              <h3 className="text-xl font-semibold">{pillar.name}</h3>
-              <div className="ml-4 px-2 py-1 bg-blue-100 rounded text-sm">
-                Level {pillar.currentLevel} → {pillar.targetLevel}
+        {/* Timeline header */}
+        <div className="gantt-header flex border-b mb-4">
+          <div className="gantt-header-pillar w-48 shrink-0 font-semibold p-2">
+            Pillar
+          </div>
+          <div className="gantt-header-timeline flex-grow flex">
+            {displayQuarters.map((quarter, idx) => (
+              <div key={idx} 
+                className="gantt-quarter shrink-0 w-32 text-center p-2 font-semibold">
+                {quarter}
               </div>
-            </div>
-            
-            <div className="roadmap-timeline">
-              {pillar.milestones.map((milestone, milestoneIndex) => (
-                <div 
-                  key={milestoneIndex} 
-                  className="roadmap-item p-4 bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow mb-4"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-lg">{milestone.title}</h4>
-                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                      {milestone.timeline}
-                    </span>
-                  </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Timeline content */}
+        <div className="gantt-body">
+          {data.pillars.map((pillar, pillarIndex) => (
+            <div key={pillarIndex} className="gantt-pillar mb-12">
+              <div className="flex items-center mb-4">
+                <h3 className="text-xl font-semibold">{pillar.name}</h3>
+                <div className="ml-4 px-2 py-1 bg-blue-100 rounded text-sm">
+                  Level {pillar.currentLevel} → {pillar.targetLevel}
+                </div>
+              </div>
+              
+              {pillar.timelineData && pillar.timelineData.stages && (
+                <div className="gantt-stages">
+                  {pillar.timelineData.stages.map((stage, stageIndex) => (
+                    <div key={stageIndex} className="gantt-stage mb-6">
+                      <div className="flex">
+                        <div className="gantt-stage-title w-48 shrink-0 p-2">
+                          <div className="font-medium text-gray-900">{stage.name}</div>
+                          <div className="text-xs text-gray-500">
+                            {stage.startQuarter} to {stage.endQuarter}
+                          </div>
+                        </div>
+                        
+                        <div className="gantt-stage-timeline flex-grow flex relative h-12">
+                          {/* Empty placeholders for each quarter */}
+                          {displayQuarters.map((_, idx) => (
+                            <div key={idx} 
+                              className="gantt-quarter-placeholder w-32 shrink-0 border-r border-gray-100">
+                            </div>
+                          ))}
+                          
+                          {/* The actual stage bar */}
+                          <div 
+                            className={`gantt-stage-bar absolute h-10 rounded-md px-2 py-1 flex items-center
+                              ${statusColors[stage.status] || 'bg-gray-300'} text-white overflow-hidden`}
+                            style={{
+                              left: `${getQuarterIndex(stage.startQuarter) * 8}rem`,
+                              width: `${calculateStageWidth(stage.startQuarter, stage.endQuarter) * 8}rem`,
+                              top: '0.25rem'
+                            }}
+                          >
+                            <div className="mr-1">
+                              {statusIcons[stage.status]}
+                            </div>
+                            <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                              {stage.name}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Stage details section */}
+                      <div className="gantt-stage-details ml-48 mt-2 pl-2 border-l-2 border-gray-200 text-sm">
+                        <div className="text-gray-700 mb-2">{stage.description}</div>
+                        
+                        {stage.milestones && stage.milestones.length > 0 && (
+                          <div className="mb-3">
+                            <h5 className="font-medium text-gray-900 mb-1">Key Milestones:</h5>
+                            <ul className="list-disc pl-5">
+                              {stage.milestones.map((milestone, milestoneIndex) => (
+                                <li key={milestoneIndex} className="text-gray-700">{milestone}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                   
-                  <p className="text-gray-600 mb-3">{milestone.description}</p>
-                  
-                  {milestone.actions && milestone.actions.length > 0 && (
-                    <div className="mb-3">
-                      <h5 className="font-medium mb-1">Actions:</h5>
+                  {/* KPIs section */}
+                  {pillar.timelineData.kpis && pillar.timelineData.kpis.length > 0 && (
+                    <div className="gantt-kpis mt-6 bg-gray-50 p-4 rounded-md">
+                      <h4 className="font-medium text-gray-900 mb-2">Key Performance Indicators:</h4>
                       <ul className="list-disc pl-5">
-                        {milestone.actions.map((action, actionIndex) => (
-                          <li key={actionIndex} className="text-sm">{action}</li>
+                        {pillar.timelineData.kpis.map((kpi, kpiIndex) => (
+                          <li key={kpiIndex} className="text-gray-700">{kpi}</li>
                         ))}
                       </ul>
                     </div>
                   )}
                 </div>
-              ))}
+              )}
             </div>
-            
-            {pillar.kpis && pillar.kpis.length > 0 && (
-              <div className="mt-4">
-                <h4 className="font-medium mb-1">Key Performance Indicators:</h4>
-                <ul className="list-disc pl-5">
-                  {pillar.kpis.map((kpi, kpiIndex) => (
-                    <li key={kpiIndex} className="text-sm">{kpi}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
         
         <div className="flex justify-end mt-6">
           <button 
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={() => {
               // Download functionality would go here
-              alert('Download functionality would be implemented here');
+              alert('Export functionality would be implemented here');
             }}
           >
             <FaDownload /> Export Roadmap
