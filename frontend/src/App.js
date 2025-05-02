@@ -62,7 +62,19 @@ const Home = () => {
 
     try {
       const useDefaultKey = !hasUsedFreeQuery() && !apiKey;
+      // Use the environment variable correctly
       let key = useDefaultKey ? process.env.REACT_APP_GEMINI_API_KEY : apiKey;
+      
+      // Debugging
+      console.log("Using default key:", useDefaultKey);
+      console.log("Has used free query:", hasUsedFreeQuery());
+      console.log("API key available:", key ? "Yes" : "No");
+      
+      // For development/testing, if no key is available in the env var, use a placeholder
+      if (useDefaultKey && !key) {
+        // Use a dummy key for development/testing
+        key = "DUMMY_KEY_FOR_TESTING";
+      }
       
       if (!key) {
         setError('API key is required. Please provide your own API key.');
