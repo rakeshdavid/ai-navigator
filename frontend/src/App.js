@@ -51,6 +51,13 @@ const Home = () => {
   const [apiKeyProvider, setApiKeyProvider] = useState('gemini');
   const [showBYOKModal, setShowBYOKModal] = useState(false);
   
+  // Check local storage on component mount to see if free query is used
+  useEffect(() => {
+    console.log("Component mounted, checking if free query was used");
+    const freeQueryUsed = hasUsedFreeQuery();
+    console.log("Free query used:", freeQueryUsed);
+  }, []);
+  
   // Debug state for development
   useEffect(() => {
     console.log("Current Maturity:", currentMaturity);
