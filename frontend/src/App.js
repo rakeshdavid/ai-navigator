@@ -1173,9 +1173,15 @@ const Home = () => {
               }`}
               disabled={!canGenerateRoadmap() || isLoading}
               onClick={() => {
-                if (hasUsedFreeQuery() && !apiKey) {
+                console.log("Generate button clicked");
+                console.log("Has used free query?", hasUsedFreeQuery());
+                console.log("API key provided?", apiKey.trim().length > 0);
+                
+                if (hasUsedFreeQuery() && !apiKey.trim()) {
+                  console.log("Showing BYOK modal");
                   setShowBYOKModal(true);
                 } else {
+                  console.log("Generating roadmap");
                   generateRoadmap();
                 }
               }}
