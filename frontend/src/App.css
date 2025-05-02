@@ -2,6 +2,60 @@
   min-height: 100vh;
 }
 
+/* Gantt Chart Styles */
+.gantt-chart-container {
+  max-width: 100%;
+  overflow-x: auto;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.gantt-header {
+  position: sticky;
+  top: 0;
+  background-color: #f9fafb;
+  z-index: 10;
+}
+
+.gantt-stage-bar {
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.gantt-stage-bar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gantt-quarter-placeholder {
+  height: 100%;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.gantt-quarter-placeholder:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.gantt-stage-details {
+  padding-left: 1rem;
+  position: relative;
+}
+
+.gantt-stage-details::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  left: -4px;
+  top: 8px;
+}
+
+.gantt-kpis {
+  border-left: 3px solid #3b82f6;
+}
+
+/* Legacy Roadmap Styles (keeping for compatibility) */
 .roadmap-container {
   max-width: 100%;
   overflow-x: auto;
@@ -29,7 +83,9 @@
   top: 24px;
 }
 
+/* Responsive adjustments */
 @media (min-width: 768px) {
+  .gantt-chart-container,
   .roadmap-container {
     padding: 2rem;
   }
@@ -65,6 +121,24 @@
   }
 }
 
-.roadmap-container {
-  animation: fadeIn 0.5s ease-out;
+/* Status colors and indicators */
+.status-in-progress {
+  color: #3b82f6;
+}
+
+.status-planned {
+  color: #9ca3af;
+}
+
+.status-completed {
+  color: #10b981;
+}
+
+.status-at-risk {
+  color: #f59e0b;
+}
+
+/* Hover tooltips for timeline bars */
+.gantt-stage-bar:hover {
+  z-index: 20;
 }
