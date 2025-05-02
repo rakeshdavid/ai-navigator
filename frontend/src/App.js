@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Launch pilot projects",
-                      "Scale successful initiatives",
-                      "Review and adjust strategy"
-                    ],
                     "status": "planned"
                   }
                 ],
