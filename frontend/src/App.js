@@ -739,8 +739,14 @@ const Home = () => {
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={() => {
               if (apiKey.trim()) {
+                console.log("API key provided in modal:", apiKey.trim().length > 0);
                 setShowBYOKModal(false);
-                generateRoadmap();
+                // Short delay to ensure state is updated
+                setTimeout(() => {
+                  generateRoadmap();
+                }, 100);
+              } else {
+                alert("Please enter an API key to continue.");
               }
             }}
           >
