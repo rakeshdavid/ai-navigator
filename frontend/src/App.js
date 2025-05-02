@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "description": "Develop framework for measuring AI value",
-                    "milestones": [
-                      "Define value metrics and KPIs",
-                      "Create value tracking processes",
                       "Develop ROI calculation methodology"
                     ],
                     "status": "planned"
