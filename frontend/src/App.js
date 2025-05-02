@@ -193,10 +193,21 @@ const Home = () => {
       if (key === "DUMMY_KEY_FOR_TESTING" || (freeQueryUsed && apiKey.trim())) {
         console.log("Using mock data response");
         
-        // Create a realistic mock response based on the input
-        // Customize based on the user's entered maturity levels
-        const timelineData = {
-          "pillars": [
+        // Create mock data structure
+        let mockData = { pillars: [] };
+        
+        // Add customized pillars based on user input
+        Object.entries(currentMaturity).forEach(([pillarName, currentLevel]) => {
+          if (targetMaturity[pillarName] && targetMaturity[pillarName] > currentLevel) {
+            const pillarData = createMockPillarData(
+              pillarName, 
+              currentLevel, 
+              targetMaturity[pillarName],
+              businessGoals
+            );
+            mockData.pillars.push(pillarData);
+          }
+        });
             {
               "name": "AI Strategy",
               "currentLevel": currentMaturity["AI Strategy"] || 1,
