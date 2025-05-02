@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                    "description": "Assess current AI value measurement capabilities",
-                    "milestones": [
-                      "Document existing value measurement practices",
-                      "Identify gaps in value tracking",
                       "Benchmark against industry standards"
                     ],
                     "status": "in-progress"
