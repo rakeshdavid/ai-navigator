@@ -464,7 +464,7 @@ const Home = () => {
           }
         });
         
-        text = JSON.stringify(timelineData);
+        text = JSON.stringify(mockData);
       } else {
         // Use the actual Google Gemini API
         try {
