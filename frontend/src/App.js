@@ -204,10 +204,20 @@ const Home = () => {
           const targetLevel = targetMaturity[pillarName];
           const levelGap = targetLevel - currentLevel;
           const numStages = Math.min(Math.max(levelGap + 1, 2), 4); // At least 2, at most 4 stages
-                  {
-                    "name": "Learning & Development",
-                    "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
+          
+          const stages = [];
+          for (let i = 0; i < numStages; i++) {
+            // Generate timestamps for stages
+            const startQuarterOffset = i;
+            const endQuarterOffset = i + 1;
+            
+            const startQuarterNum = ((currentQuarter + startQuarterOffset - 1) % 4) + 1;
+            const startYearOffset = Math.floor((currentQuarter + startQuarterOffset - 1) / 4);
+            const startYear = currentYear + startYearOffset;
+            
+            const endQuarterNum = ((currentQuarter + endQuarterOffset - 1) % 4) + 1;
+            const endYearOffset = Math.floor((currentQuarter + endQuarterOffset - 1) / 4);
+            const endYear = currentYear + endYearOffset;
                     "description": "Develop AI training and upskilling programs",
                     "milestones": [
                       "Create AI learning paths",
