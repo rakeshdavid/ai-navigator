@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                  "Customer satisfaction improvements"
-                ]
-              }
-            },
             {
               "name": "AI Organization",
               "currentLevel": currentMaturity["AI Organization"] || 1,
