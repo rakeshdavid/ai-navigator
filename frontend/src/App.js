@@ -205,18 +205,6 @@ const Home = () => {
           const levelGap = targetLevel - currentLevel;
           const numStages = Math.min(Math.max(levelGap + 1, 2), 4); // At least 2, at most 4 stages
                   {
-                    "name": "Skills Assessment",
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
-                    "description": "Assess current AI skills and cultural readiness",
-                    "milestones": [
-                      "Complete AI skills inventory",
-                      "Assess AI cultural readiness",
-                      "Identify skill gaps"
-                    ],
-                    "status": "in-progress"
-                  },
-                  {
                     "name": "Learning & Development",
                     "startQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
                     "endQuarter": `Q${currentQuarter + 3 > 4 ? currentQuarter + 3 - 4 : currentQuarter + 3} ${currentQuarter + 3 > 4 ? currentYear + 1 : currentYear}`,
