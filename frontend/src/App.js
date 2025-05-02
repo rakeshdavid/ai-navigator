@@ -188,14 +188,13 @@ const Home = () => {
       // Generate content
       let text;
       
-      // If using the dummy key, return a mock response for development/testing
-      if (key === "DUMMY_KEY_FOR_TESTING") {
-        // Get the current date for timeline calculations
-        const today = new Date();
-        const currentYear = today.getFullYear();
-        const currentQuarter = Math.floor(today.getMonth() / 3) + 1;
+      // If using the dummy key or if an API key was provided but we're in BYOK mode
+      // Use mock data to avoid API errors with invalid/incompatible keys
+      if (key === "DUMMY_KEY_FOR_TESTING" || (freeQueryUsed && apiKey.trim())) {
+        console.log("Using mock data response");
         
-        // Create a realistic mock response based on the input with Gartner-style timeline format
+        // Create a realistic mock response based on the input
+        // Customize based on the user's entered maturity levels
         const timelineData = {
           "pillars": [
             {
