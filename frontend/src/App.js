@@ -1099,12 +1099,12 @@ const Home = () => {
             <MaturityChart current={currentMaturity} target={targetMaturity} />
           )}
           
-          {/* API Key section (if free query already used) */}
+          {/* API Key section (always visible if free query already used) */}
           {hasUsedFreeQuery() && (
             <div className="mb-6 p-4 border border-yellow-300 bg-yellow-50 rounded-md">
               <div className="flex items-start">
                 <FaLock className="text-yellow-500 mt-1 mr-2" />
-                <div>
+                <div className="w-full">
                   <h4 className="font-medium mb-1">Free Query Used</h4>
                   <p className="text-sm mb-3">
                     You've used your free query. Please provide your own API key to continue. Make sure you've also entered your business goals above.
@@ -1130,7 +1130,10 @@ const Home = () => {
                         type="password" 
                         className="w-full p-2 border rounded"
                         value={apiKey}
-                        onChange={(e) => setApiKey(e.target.value)}
+                        onChange={(e) => {
+                          console.log("API key changed:", e.target.value.trim().length > 0);
+                          setApiKey(e.target.value);
+                        }}
                         placeholder="Enter your API key"
                       />
                     </div>
@@ -1169,6 +1172,12 @@ const Home = () => {
                       </a>
                     )}
                   </div>
+                  
+                  {apiKey.trim() && (
+                    <div className="mt-4 text-sm text-green-600 flex items-center">
+                      <FaCheckCircle className="mr-1" /> API key provided. You can now generate a roadmap.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
