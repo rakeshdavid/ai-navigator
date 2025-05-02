@@ -269,10 +269,42 @@ const Home = () => {
                   ["Scale successful initiatives", "Measure outcomes", "Optimize and improve"]
                 ][i] || ["Milestone 1", "Milestone 2", "Milestone 3"];
             }
-                  {
-                    "name": "Culture Transformation",
-                    "startQuarter": `Q${currentQuarter + 2 > 4 ? currentQuarter + 2 - 4 : currentQuarter + 2} ${currentQuarter + 2 > 4 ? currentYear + 1 : currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 5 > 4 ? currentQuarter + 5 - 4 : currentQuarter + 5} ${currentQuarter + 5 > 4 ? currentYear + 1 : currentYear}`,
+            
+            // Generate description based on business goals
+            const lowercaseGoals = businessGoals.toLowerCase();
+            let focus = "business value";
+            
+            if (lowercaseGoals.includes("customer")) {
+              focus = "customer experience";
+            } else if (lowercaseGoals.includes("efficien")) {
+              focus = "operational efficiency";
+            } else if (lowercaseGoals.includes("cost")) {
+              focus = "cost reduction";
+            } else if (lowercaseGoals.includes("innovat")) {
+              focus = "innovation";
+            } else if (lowercaseGoals.includes("product")) {
+              focus = "product development";
+            }
+            
+            if (i === 0) {
+              stageDescription = `Assess current ${pillarName.toLowerCase()} capabilities and identify opportunities for ${focus} improvement.`;
+            } else if (i === 1) {
+              stageDescription = `Develop comprehensive ${pillarName.toLowerCase()} framework and roadmap focused on ${focus}.`;
+            } else if (i === 2) {
+              stageDescription = `Implement ${pillarName.toLowerCase()} initiatives across the organization to drive ${focus}.`;
+            } else {
+              stageDescription = `Optimize ${pillarName.toLowerCase()} capabilities and measure impact on ${focus}.`;
+            }
+            
+            // Create the stage object
+            stages.push({
+              name: stageName,
+              startQuarter: `Q${startQuarterNum} ${startYear}`,
+              endQuarter: `Q${endQuarterNum} ${endYear}`,
+              description: stageDescription,
+              milestones: stageMilestones,
+              status: i === 0 ? "in-progress" : "planned"
+            });
                     "description": "Foster AI-positive culture across organization",
                     "milestones": [
                       "Implement change management",
