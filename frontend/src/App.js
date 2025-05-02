@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-                      "Map existing AI roles and teams",
-                      "Identify organizational gaps",
-                      "Review governance structure"
-                    ],
                     "status": "in-progress"
                   },
                   {
