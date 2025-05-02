@@ -611,6 +611,13 @@ const Home = () => {
     // Debug the inputs
     console.log("Checking if can generate roadmap:");
     console.log("Business goals:", businessGoals.trim().length > 0);
+    console.log("API key provided:", apiKey.trim().length > 0);
+    
+    // If user has already provided their own API key and business goals, enable the button
+    if (apiKey.trim().length > 0 && businessGoals.trim().length > 0) {
+      console.log("User provided API key and business goals - enabling generation");
+      return true;
+    }
     
     if (Object.keys(currentMaturity).length === 0) {
       console.log("No current maturity levels set");
