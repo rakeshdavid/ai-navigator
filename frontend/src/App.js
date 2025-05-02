@@ -208,10 +208,8 @@ const Home = () => {
             mockData.pillars.push(pillarData);
           }
         });
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Current State Assessment",
+
+        text = JSON.stringify(mockData);
                     "startQuarter": `Q${currentQuarter} ${currentYear}`,
                     "endQuarter": `Q${currentQuarter} ${currentYear}`,
                     "description": "Assess existing AI capabilities and alignment with business strategy",
