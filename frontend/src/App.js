@@ -210,14 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-              }
-            },
-            {
-              "name": "People & Culture",
-              "currentLevel": currentMaturity["People & Culture"] || 1,
-              "targetLevel": targetMaturity["People & Culture"] || 3,
-              "timelineData": {
-                "stages": [
                   {
                     "name": "Skills Assessment",
                     "startQuarter": `Q${currentQuarter} ${currentYear}`,
