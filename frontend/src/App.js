@@ -587,12 +587,201 @@ const Home = () => {
         };
         
         // Return the timeline data as a JSON string
+          "pillars": []
+        };
+        
+        // Add customized pillars based on user input
+        Object.entries(currentMaturity).forEach(([pillarName, currentLevel]) => {
+          if (targetMaturity[pillarName] && targetMaturity[pillarName] > currentLevel) {
+            const pillarData = createMockPillarData(
+              pillarName, 
+              currentLevel, 
+              targetMaturity[pillarName],
+              businessGoals
+            );
+            timelineData.pillars.push(pillarData);
+          }
+        });
+        
         text = JSON.stringify(timelineData);
       } else {
-        // Use the actual API
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        text = response.text();
+        // Use the actual Google Gemini API
+        try {
+          const result = await model.generateContent(prompt);
+          const response = await result.response;
+          text = response.text();
+        } catch (apiError) {
+          console.error("API error:", apiError);
+          throw new Error(`API request failed: ${apiError.message}`);
+        }
+      }
+      
+      // Helper function to create realistic mock data for a pillar
+      function createMockPillarData(pillarName, currentLevel, targetLevel, businessGoals) {
+        // Get the current date for timeline calculations
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentQuarter = Math.floor(today.getMonth() / 3) + 1;
+        
+        // Calculate how many stages we need based on the gap between levels
+        const levelGap = targetLevel - currentLevel;
+        const numStages = Math.min(Math.max(levelGap + 1, 2), 4); // At least 2, at most 4 stages
+        
+        // Create stages with realistic timelines
+        const stages = [];
+        for (let i = 0; i < numStages; i++) {
+          const startQuarterOffset = i;
+          const endQuarterOffset = i + 1;
+          
+          const startQuarterNum = ((currentQuarter + startQuarterOffset - 1) % 4) + 1;
+          const startYearOffset = Math.floor((currentQuarter + startQuarterOffset - 1) / 4);
+          const startYear = currentYear + startYearOffset;
+          
+          const endQuarterNum = ((currentQuarter + endQuarterOffset - 1) % 4) + 1;
+          const endYearOffset = Math.floor((currentQuarter + endQuarterOffset - 1) / 4);
+          const endYear = currentYear + endYearOffset;
+          
+          const stage = {
+            "name": getStageNameForPillar(pillarName, i, numStages),
+            "startQuarter": `Q${startQuarterNum} ${startYear}`,
+            "endQuarter": `Q${endQuarterNum} ${endYear}`,
+            "description": getStageDescriptionForPillar(pillarName, i, numStages, businessGoals),
+            "milestones": getMilestonesForPillar(pillarName, i, numStages),
+            "status": i === 0 ? "in-progress" : "planned"
+          };
+          
+          stages.push(stage);
+        }
+        
+        return {
+          "name": pillarName,
+          "currentLevel": currentLevel,
+          "targetLevel": targetLevel,
+          "timelineData": {
+            "stages": stages,
+            "kpis": getKPIsForPillar(pillarName)
+          }
+        };
+      }
+      
+      // Helper functions to generate realistic content
+      function getStageNameForPillar(pillarName, stageIndex, totalStages) {
+        const stageNames = {
+          "AI Strategy": ["Assessment", "Strategy Development", "Implementation Planning", "Execution"],
+          "AI Value": ["Value Assessment", "Value Framework", "Value Measurement", "Value Optimization"],
+          "AI Organization": ["Organizational Assessment", "Org Design", "Implementation", "Optimization"],
+          "People & Culture": ["Skills Assessment", "Training Development", "Culture Change", "Excellence"],
+          "Governance": ["Governance Assessment", "Framework Development", "Implementation", "Continuous Improvement"],
+          "Engineering": ["Engineering Assessment", "Foundation Building", "Capability Scaling", "Engineering Excellence"],
+          "Data": ["Data Assessment", "Data Foundation", "Advanced Capabilities", "Data Excellence"]
+        };
+        
+        const names = stageNames[pillarName] || ["Assessment", "Planning", "Implementation", "Optimization"];
+        return names[stageIndex] || `Stage ${stageIndex + 1}`;
+      }
+      
+      function getStageDescriptionForPillar(pillarName, stageIndex, totalStages, businessGoals) {
+        const lowercaseGoals = businessGoals.toLowerCase();
+        const focusAreas = [];
+        
+        if (lowercaseGoals.includes("customer")) focusAreas.push("customer experience");
+        if (lowercaseGoals.includes("efficien")) focusAreas.push("operational efficiency");
+        if (lowercaseGoals.includes("cost")) focusAreas.push("cost reduction");
+        if (lowercaseGoals.includes("innovat")) focusAreas.push("innovation");
+        if (lowercaseGoals.includes("product")) focusAreas.push("product development");
+        
+        const focus = focusAreas.length > 0 ? 
+          focusAreas[Math.floor(Math.random() * focusAreas.length)] : 
+          "business value";
+        
+        const descriptions = {
+          0: `Assess current ${pillarName.toLowerCase()} capabilities and identify opportunities for ${focus} improvement.`,
+          1: `Develop comprehensive ${pillarName.toLowerCase()} framework and roadmap focused on ${focus}.`,
+          2: `Implement ${pillarName.toLowerCase()} initiatives across the organization to drive ${focus}.`,
+          3: `Optimize ${pillarName.toLowerCase()} capabilities and measure impact on ${focus}.`
+        };
+        
+        return descriptions[stageIndex] || `Stage ${stageIndex + 1} for ${pillarName}`;
+      }
+      
+      function getMilestonesForPillar(pillarName, stageIndex, totalStages) {
+        const milestonesByPillar = {
+          "AI Strategy": [
+            ["Document current AI initiatives", "Form AI strategy team", "Identify strategic gaps"],
+            ["Define AI vision and mission", "Create AI investment roadmap", "Identify strategic AI use cases"],
+            ["Prioritize AI initiatives", "Assign ownership and resources", "Establish success metrics"],
+            ["Launch pilot projects", "Scale successful initiatives", "Review and adjust strategy"]
+          ],
+          "AI Value": [
+            ["Document value measurement practices", "Identify value tracking gaps", "Benchmark against industry"],
+            ["Define value metrics and KPIs", "Create value tracking processes", "Develop ROI methodology"],
+            ["Implement value measurement", "Begin tracking initiative ROI", "Report on value creation"],
+            ["Optimize value delivery", "Implement value dashboards", "Drive continuous improvement"]
+          ],
+          "Data": [
+            ["Conduct data quality audit", "Map data sources and flows", "Identify data gaps"],
+            ["Implement data governance", "Enhance data quality", "Develop data architecture"],
+            ["Implement data catalogs", "Enable self-service analytics", "Enhance data integration"],
+            ["Advanced data lifecycle management", "Achieve high data literacy", "Enable predictive capabilities"]
+          ]
+        };
+        
+        // Generic milestones for pillars without specific ones
+        const genericMilestones = [
+            ["Document current state", "Identify gaps and opportunities", "Define baseline metrics"],
+            ["Develop framework", "Create implementation plan", "Define success metrics"],
+            ["Begin implementation", "Monitor progress", "Adjust approach as needed"],
+            ["Scale successful initiatives", "Measure outcomes", "Optimize and improve"]
+        ];
+        
+        const milestones = milestonesByPillar[pillarName] || genericMilestones;
+        return milestones[stageIndex] || ["Milestone 1", "Milestone 2", "Milestone 3"];
+      }
+      
+      function getKPIsForPillar(pillarName) {
+        const kpisByPillar = {
+          "AI Strategy": [
+            "% of business objectives supported by AI initiatives",
+            "AI investment ROI",
+            "Number of AI-enabled business processes"
+          ],
+          "AI Value": [
+            "Cost reduction attributed to AI",
+            "Revenue increase from AI initiatives", 
+            "Customer satisfaction improvements"
+          ],
+          "AI Organization": [
+            "% of departments with AI expertise",
+            "AI project delivery efficiency",
+            "Cross-functional collaboration metrics"
+          ],
+          "People & Culture": [
+            "% of employees with AI literacy",
+            "AI training completion rates",
+            "Employee AI adoption metrics"
+          ],
+          "Governance": [
+            "AI risk assessment coverage",
+            "Compliance with AI regulations",
+            "Ethics violation incidents"
+          ],
+          "Engineering": [
+            "Model deployment cycle time",
+            "AI system reliability metrics",
+            "Engineering productivity metrics"
+          ],
+          "Data": [
+            "Data quality score",
+            "% of data accessible for AI models",
+            "Data governance maturity"
+          ]
+        };
+        
+        return kpisByPillar[pillarName] || [
+          "Implementation success rate",
+          "Process efficiency improvement",
+          "Business impact metrics"
+        ];
       }
       
       // Parse the JSON response
