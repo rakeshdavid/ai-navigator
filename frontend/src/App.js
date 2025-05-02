@@ -210,10 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-            {
-              "name": "AI Organization",
-              "currentLevel": currentMaturity["AI Organization"] || 1,
-              "targetLevel": targetMaturity["AI Organization"] || 3,
               "timelineData": {
                 "stages": [
                   {
