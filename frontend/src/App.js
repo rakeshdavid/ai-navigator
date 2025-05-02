@@ -646,7 +646,7 @@ const Home = () => {
       <div className="bg-white rounded-lg p-8 max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4">Bring Your Own API Key</h2>
         <p className="mb-4">
-          You've used your free query. To continue using AI Navigator, please provide your own API key.
+          You've used your free query. To continue using AI Navigator, please provide your own API key. Once you've entered your API key and business goals, you'll be able to generate a roadmap.
         </p>
         
         <div className="mb-4">
