@@ -210,14 +210,6 @@ const Home = () => {
         });
 
         text = JSON.stringify(mockData);
-              "currentLevel": currentMaturity["AI Value"] || 1,
-              "targetLevel": targetMaturity["AI Value"] || 4,
-              "timelineData": {
-                "stages": [
-                  {
-                    "name": "Value Assessment",
-                    "startQuarter": `Q${currentQuarter} ${currentYear}`,
-                    "endQuarter": `Q${currentQuarter + 1 > 4 ? 1 : currentQuarter + 1} ${currentQuarter + 1 > 4 ? currentYear + 1 : currentYear}`,
                     "description": "Assess current AI value measurement capabilities",
                     "milestones": [
                       "Document existing value measurement practices",
