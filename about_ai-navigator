@@ -1,0 +1,126 @@
+# AI Navigator - Organization AI Maturity Assessment Tool
+
+## About this Repo
+
+AI Navigator is a comprehensive web application designed to help organizations assess their AI maturity levels and generate customized roadmaps for AI implementation. Using a framework based on Gartner's AI maturity model, it provides actionable insights and implementation plans to advance your organization's AI capabilities.
+
+## Key Features
+
+- **AI Maturity Assessment**: Evaluate your organization's current maturity across key pillars including AI Strategy, AI Value, AI Organization, People & Culture, Governance, Engineering, and Data
+- **Gap Analysis**: Visualize the gap between your current and target maturity levels through interactive charts
+- **Customized Roadmap Generation**: Generate a detailed implementation roadmap tailored to your specific business goals
+- **Timeline Visualization**: View your AI journey across quarters with clear stages, milestones, and key performance indicators
+- **Multiple AI Provider Support**: Use your preferred AI provider (Google Gemini, OpenAI, or Anthropic) for roadmap generation
+
+## Tech Stack
+
+- **Frontend**: React with Tailwind CSS for styling
+- **Backend**: FastAPI (Python)
+- **Database**: MongoDB
+- **Charts**: Recharts for data visualization
+- **Deployment**: Render and MongoDB Atlas (free tier options)
+
+## Installation and Deployment
+
+This application can be deployed using Render's free tier along with MongoDB Atlas. The setup process involves creating a MongoDB database and deploying both the frontend and backend components.
+
+### Prerequisites
+
+- Git
+- A GitHub account (optional but recommended)
+- A Render account
+- A MongoDB Atlas account
+
+### Part 1: Setting Up MongoDB Atlas
+
+1. Sign up for a free account at MongoDB Atlas
+2. Click on Build a Cluster and select the Free tier
+3. Choose your preferred cloud provider and region and click Create Deployment
+
+#### Database Access Setup
+
+1. In the MongoDB Atlas dashboard, navigate to Database Access under Security
+2. Create a new database user with read and write privileges
+3. Configure network access to allow connections from anywhere
+4. Get your connection string from the Connect option in the Clusters view
+
+### Part 2: Deploying on Render
+
+1. Sign up for a free account at Render
+2. Create a `render.yaml` blueprint file in your project root with the following configuration:
+
+```yaml
+services:  
+  # Backend API service  
+  - type: web  
+    name: your-app-api  
+    runtime: python  
+    region: oregon  
+    plan: free  
+    buildCommand: cd backend && pip install -r requirements.txt  
+    startCommand: cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT --workers 1 --reload  
+    envVars:  
+      - key: PYTHON_VERSION  
+        value: 3.11.0  
+      - key: MONGO_URL  
+        sync: false  
+      - key: SECRET_KEY  
+        sync: false  
+      - key: FRONTEND_URL  
+        value: https://your-app-frontend.onrender.com  
+  
+  # Frontend React application  
+  - type: web  
+    name: your-app-frontend  
+    runtime: node  
+    region: oregon  
+    plan: free  
+    buildCommand: cd frontend && npm i  
+    startCommand: cd frontend && PORT=$PORT npm start  
+    envVars:  
+      - key: NODE_VERSION  
+        value: 16.20.0  
+      - key: REACT_APP_BACKEND_URL  
+        fromService:  
+          name: your-app-api  
+          type: web  
+          envVarKey: RENDER_EXTERNAL_URL
+```
+
+3. Deploy your application on Render:
+   - Create a new Blueprint in the Render dashboard
+   - Set up environment variables in your backend service
+
+### Part 3: Connecting Everything
+
+After deployment, Render will provide URLs for both your frontend and backend services:
+
+1. Make note of the frontend service URL
+2. Set the `FRONTEND_URL` environment variable in your backend service to match this URL
+
+## Usage
+
+Once deployed, users can:
+
+- Input their organization's business goals
+- Select current and target maturity levels across key AI pillars
+- Generate a customized AI implementation roadmap
+- View and export the roadmap with detailed timelines, milestones, and KPIs
+
+For first-time users, a free query is available without an API key. Subsequent uses require providing your own API key from Google Gemini, OpenAI, or Anthropic.
+
+## Troubleshooting
+
+If you encounter issues during deployment, check the troubleshooting section in the README for solutions to common problems related to database connections, deployment, and CORS errors.
+
+## Note
+
+This application is intended for educational and planning purposes. Implementation of the generated roadmaps should be guided by AI and organizational transformation experts.
+
+---
+
+**Notes:**
+- The "About this Repo" section above provides a comprehensive overview of the AI Navigator project, its features, tech stack, and deployment instructions.
+- The installation instructions were included from the README file as requested.
+- I've added usage instructions based on the functionality visible in the codebase.
+- All information is cited directly from the repository files.
